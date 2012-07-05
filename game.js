@@ -29,12 +29,25 @@ window.onload = function(){
 	game.onload = function(){
 		var width = 32;
 		var height = 32;
+
+/*************************************************************************************************/
+/* SET UP THE USER DISPLAY                                                                       */
+/*************************************************************************************************/
+		game.time = 30;
 		
-		var scoreLabel = new ScoreLabel(8, 8);
+		var scoreLabel = new ScoreLabel(8, gameHeight - 10 - 8);
+		game.rootScene.addChild(scoreLabel);
+		
+		var timeLabel = new TimeLabel(8, 8, 'countdown');
+		timeLabel.time = game.time;
+		game.rootScene.addChild(timeLabel);
+		
 		game.rootScene.addEventListener('enterframe', function () {
 			scoreLabel.score = game.score;
+			if (timeLabel.time == 0){
+				// End game
+			}
 		});
-		game.rootScene.addChild(scoreLabel);
 			
 /*************************************************************************************************/
 /* SET UP THE TROLL                                                                              */
@@ -56,7 +69,13 @@ window.onload = function(){
 		});
 
 		troll.addEventListener("touchstart", function(){
-			game.score += 100;
+			game.score += 10;
+			if ((timeLabel.time + 2) > game.time) {
+				timeLabel.time = game.time;
+			}
+			else {
+				timeLabel.time += 2;
+			}
 		});
 		
 		game.rootScene.addChild(troll);
